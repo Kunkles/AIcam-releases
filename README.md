@@ -442,6 +442,65 @@ VOSK_MODEL=models/vosk-model-small-en-us-0.15 \
 
 ## Changelog
 
+### 0.4.0
+
+- **A drawn menu bar icon** — a camera with a waveform through it — in
+  place of the system waveform glyph. It is a template image, which means
+  the artwork is black and macOS paints it: light on a dark menu bar,
+  dark on a light one, inverted while the menu is open. Listening is the
+  same shape knocked out of a filled slab rather than a tint, because a
+  tint is what the system already uses for everything else and this has
+  to be readable from across a cart.
+- **A phrase is no longer “already taken” because a word was thrown
+  away.** Teaching “a camera go 125 anamorphic” for a 1.25× squeeze was
+  refused as already meaning shutter 125 — which it only does because the
+  grammar discards words it does not know, so the anamorphic went on the
+  floor and the 125 read as an angle. A phrase carrying a word it does
+  not understand is free to be given one. A phrase it understands
+  completely is still protected.
+- **A taught phrase that writes something the camera will not take says
+  so**, under the phrase, in red, with the nearest value the camera does
+  offer as a button. Pressing it repoints the phrase; the wording was
+  never the problem. Nothing can be taught a value the setting does not
+  list any more either. This is not hypothetical: four phrases on the
+  machine this was built on wrote squeeze factors of 1_3 and 1_5, which
+  no ALEXA has ever offered, because they were taught against a stand-in
+  whose list was wrong.
+- **For anyone with a camera to hand**: `tools/check_camera.py` reads
+  `/all.cgi`, keeps the dump, and holds what ARRI's simulators say
+  against what the camera actually publishes — every variable this app
+  may write, whether it is there, and what it takes. With `--write` it
+  tries each one, reads it back, times it and puts it back. See
+  `docs/on-a-camera.md`.
+
+#### What is still not right
+
+The shape of this got clearer, and worse, since 0.3.0. The variable names
+in the language are an ALEXA 35's, and about half the overlays are wrong
+on at least one other camera — the AMIRA and the ALEXA Mini do not
+number their SDI settings at all. `docs/surfaces.md` has the table;
+`tests/test_against_the_models.py` holds six failing cases as the score.
+
+- **“Show me log” and “show me 709” write the wrong variable**, on every
+  model. `SDI1Processing` is the kind of feed a connector carries; the
+  log-versus-look choice is `SDI1PathProcessing`, `SDI1Gamma` or
+  `SDI1GammaPIA` depending on the camera. 709 is not a processing mode at
+  all — it lives in `SDI1ColorSpace`. See `docs/processing.md`.
+- **The viewfinder is wrong on an ALEXA 35 too.** 0.3.0 said the finder
+  side was fine; that is true of the AMIRA, the Mini and the Mini LF. On
+  a 35 the live variable is `EVFMonitorPathProcessingPia`, and it has no
+  plain `LOOK`.
+- **The centre mark, the level and the outside shading are wrong on the
+  older cameras**, which spell them `SDICenterMark` rather than
+  `SDI1CenterMark`. An ALEXA Mini appears to have no SDI centre mark at
+  all, and the AMIRA gates its centre mark behind framelines being on,
+  which no amount of choosing the right variable name fixes.
+- **A sequence is not confirmed.** A preset sends its writes one after
+  another and moves on when the camera answers, and that answer means
+  accepted rather than applied. See `docs/sequences.md`.
+- **Discovery has never met a real camera.** The 1.2 second timeout is
+  taste rather than measurement. See `docs/discovery.md`.
+
 ### 0.3.0
 
 - **Find cameras.** Instead of typing an address, a sweep of the network
