@@ -1,5 +1,53 @@
 # Changelog
 
+## 0.5.0
+
+- **“Show me log” and “show me 709” work.** They wrote
+  `SDI1Processing`, which is the kind of feed a connector carries, not
+  the log-versus-look choice — so every ALEXA would have refused them.
+  The right variable depends on the camera, and there is no way to know
+  it without asking, so the camera is now asked: `/all.cgi` is read
+  before the write, and what goes out is the first name that camera has
+  carrying the first value that name takes. An AMIRA gets
+  `SDI1PathProcessing`, a Mini LF `SDI1Gamma`, an ALEXA 35
+  `SDI1GammaPIA` with LogC4, and the 35's finder
+  `EVFMonitorPathProcessingPia`, which has no plain LOOK.
+- **709 is two writes**, because it is not a processing mode on any
+  ALEXA: the look, and the colour space to REC709.
+- **The centre mark, the level and the outside shading were wrong on the
+  older cameras** for the same reason — an AMIRA spells it
+  `SDICenterMark`, not `SDI1CenterMark` — and are fixed by the same
+  change.
+- **A camera that cannot do something says so.** An ALEXA Mini has no
+  centre mark on its SDI outputs under any spelling; “centre dot” there
+  now answers “this camera has nothing that does that” rather than
+  failing on the wire and looking like a network fault.
+
+### What is still not right
+
+Most of what this list held is now fixed. What is left needs a camera,
+not a decision.
+
+- **Whether the CGI takes an enum by name or by index.** Everything
+  writes the option name, which is what `/all.cgi` publishes. The reason
+  to doubt it is `ExposureIndex`: the simulator lists `EI_160`, and a
+  real camera takes an integer index instead. If these are indices too,
+  the shape of the fix is unchanged and the values move.
+  `tools/check_camera.py --write` settles it in one run.
+- **Which of two variables an ALEXA 35 honours.** It has both
+  `SDI1Gamma` and `SDI1GammaPIA`. This writes the Pia one, because LogC4
+  is what a 35 records; only a camera can say whether that is the one
+  that moves the picture.
+- **The AMIRA gates its centre mark behind framelines being on**, and
+  its `SDICenterMark` publishes no `OFF`. So “no centre mark” there has
+  no value to write and needs another mechanism — which no amount of
+  choosing the right variable name fixes. See `docs/surfaces.md`.
+- **A sequence is not confirmed.** A preset sends its writes one after
+  another and moves on when the camera answers, and that answer means
+  accepted rather than applied. See `docs/sequences.md`.
+- **Discovery has never met a real camera.** The 1.2 second timeout is
+  taste rather than measurement. See `docs/discovery.md`.
+
 ## 0.4.0
 
 - **A drawn menu bar icon** — a camera with a waveform through it — in
