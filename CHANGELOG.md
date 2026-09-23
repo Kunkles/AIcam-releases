@@ -1,5 +1,50 @@
 # Changelog
 
+## 0.3.0
+
+- **Find cameras.** Instead of typing an address, a sweep of the network
+  this Mac is actually on, keeping whatever answers the way an ALEXA
+  does — with its model and serial, added to the next free letter at the
+  address it answered on. It does not use the app's default addresses to
+  look: those are one crew's convention, and the machine is usually
+  somewhere else entirely, so the networks searched are read from the
+  Mac's own interfaces and named on screen. What counts as a camera is
+  the shape of the answer rather than the status code, because plenty of
+  things on a network return 200 and a printer in the camera list would
+  be worse than an empty one. Nothing is written during a sweep; it reads
+  `/all.cgi` and nothing else.
+- **A sweep macOS has not allowed says so.** The first time, macOS asks
+  whether AIcam may find devices on the local network — and until it is
+  allowed, every request fails instantly and the result looks exactly
+  like a network with no cameras on it. The difference is the clock: 254
+  addresses take about seven seconds when the requests really go out and
+  under two when they do not. A result that came back too fast points at
+  System Settings, and says to quit from the menu bar icon rather than
+  just closing the window, because the permission only reaches a new
+  process.
+
+  **macOS asks again after every update**, this one included. If Find
+  cameras comes back instantly having found nothing, that is what
+  happened.
+
+### What is still not right
+
+- **Discovery has never met a real camera.** The mechanism is tested —
+  against stand-ins answering over HTTP, and against a real router, which
+  is correctly not listed — but no ALEXA has answered a sweep. The
+  timeout of 1.2 seconds is taste rather than measurement, and a camera
+  slower than that is missed silently, which looks identical to an empty
+  network. `docs/discovery.md` lists what a camera has to settle.
+- **“Show me log” and “show me 709” write the wrong variable.**
+  `SDI1Processing` is the kind of feed a connector carries; the
+  log-versus-look choice is `SDI1Gamma` — and it is spelled differently
+  on every camera generation. Everything else on the SDI side works; this
+  one needs a real camera to confirm how the values are encoded before it
+  is changed. See `docs/processing.md`.
+- **A sequence is not confirmed.** A preset sends its writes one after
+  another and moves on when the camera answers, and that answer means
+  accepted rather than applied. See `docs/sequences.md`.
+
 ## 0.2.0
 
 - **Two instructions in one breath.** “A camera n 6 and B camera n 12”
