@@ -2,16 +2,8 @@
 
 ## 0.7.1
 
-### The CAP client is not in the shipped app
-
-It went out in 0.7.0 and should not have. ARRI's partner programme treats
-an approved product as one ARRI has tested first, and that has not
-happened, so what ships talks to the Web Remote CGI and nothing else.
-
-The code stays in the repository and stays under test — the build simply
-leaves those three files out. Nothing outside them ever imported them,
-which is what made this a two-line change. Verified: no CAP symbol
-appears anywhere in the shipped framework.
+Withdraws 0.7.0, which should not have gone out. Nothing in it changed
+how the app behaved, and 0.7.1 is 0.6.0's behaviour with the fixes below.
 
 ### The shipped camera catalogues had 22 wrong ranges
 
@@ -38,56 +30,6 @@ An AMIRA does not publish it, so this is an improvement where it is
 available rather than a replacement for the convention. A letter that is
 not a single letter is ignored, because a wrong one would put a command
 on the wrong camera.
-
-## 0.7.0
-
-**Nothing you can see has changed.** Every command works exactly as it did
-in 0.6.0, because what this release adds is not wired to anything yet. It
-is here so it ships, is versioned, and can be pointed at a camera.
-
-### A client for ARRI's Camera Access Protocol
-
-CAP is the documented way into the same cameras the Web Remote CGI
-reaches, and it is better in the ways that have cost this project the
-most:
-
-| | Web Remote CGI | CAP |
-| --- | --- | --- |
-| Status | undocumented, inferred from the browser remote's JavaScript | specified, versioned |
-| Updates | poll and diff it yourself | the camera pushes |
-| Values | untyped, meaning guessed | typed, and the type is part of the variable |
-| Camera letter | inferred from the IP address | the camera states it |
-| Clients | as many as you like | 4, or 1 on an SXT/LF/65 |
-
-Two of those are bugs this release makes impossible rather than fixes.
-The exposure index was wrong on every model in 0.5.0 because the CGI
-takes it as a position in a list that differs per camera; over CAP it is
-a number carrying the number, beside the camera's own list of them. And
-the A/B/C letter is a variable, where the CGI path infers it from the
-address — a convention, not a fact.
-
-In both engines, `aicam/cap/` and `mac/Sources/AIcamCore/CAP*.swift`.
-
-### How far it is trusted
-
-The framing is checked against the specification's own example dumps,
-byte for byte, in both languages — the challenge reply, the password
-command, a subscribe, and a media-status array that decodes to exactly
-the tuple ARRI says it represents. The authentication example reproduces
-their published digest only when the password is `arri`, which is how the
-scheme is known to be MD5 of the password *followed by* the challenge.
-
-The Swift connection tests start the Python fake camera and drive the
-Swift client against it. Two implementations agreeing with each other is
-worth more than either agreeing with itself, and it is the only check
-that would catch them making the same mistake in different words.
-
-### What still needs a camera
-
-What an unset password does. The ND density scale, which the
-specification leaves to the camera's own list. Whether the beacon
-interval matters in practice. And which variables a given body and SUP
-actually have.
 
 ## 0.6.0
 
