@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.7.1
+
+### The CAP client is not in the shipped app
+
+It went out in 0.7.0 and should not have. ARRI's partner programme treats
+an approved product as one ARRI has tested first, and that has not
+happened, so what ships talks to the Web Remote CGI and nothing else.
+
+The code stays in the repository and stays under test — the build simply
+leaves those three files out. Nothing outside them ever imported them,
+which is what made this a two-line change. Verified: no CAP symbol
+appears anywhere in the shipped framework.
+
+### The shipped camera catalogues had 22 wrong ranges
+
+`data/models/*.json` is scraped from ARRI's public menu simulators, which
+write 11000 as `11E3`. The scraper's number pattern stopped at the
+digits, so it read that as **11** — and every white balance range in the
+files said 2 to 11 kelvin. Also caught: the user rectangle bounds, which
+said 0 to 1 rather than 0 to 1000.
+
+Nothing read those numbers, so nothing behaved wrongly. They were still
+wrong in files that exist to be believed, and the next thing to trust
+them would have been the one to find out.
+
+### A camera can say which letter it is
+
+An ALEXA 35, an ALEXA Mini and a Mini LF publish `CameraIndex` — the
+A/B/C set in the camera's own menu — and a discovery sweep now reads it.
+Everywhere else the letter is worked out from the address, A at .200 and
+B at .201, which is one crew's convention rather than a fact: a job that
+numbers its cameras differently got every name wrong while looking
+entirely normal.
+
+An AMIRA does not publish it, so this is an improvement where it is
+available rather than a replacement for the convention. A letter that is
+not a single letter is ignored, because a wrong one would put a command
+on the wrong camera.
+
 ## 0.7.0
 
 **Nothing you can see has changed.** Every command works exactly as it did
