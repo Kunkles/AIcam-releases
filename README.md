@@ -436,6 +436,39 @@ VOSK_MODEL=models/vosk-model-small-en-us-0.15 \
 
 ## Changelog
 
+### 0.8.1
+
+#### "3200 K" works again
+
+0.8.0 stopped understanding a colour temperature with anything unfamiliar
+beside it. That included **"3200 K"**, which is how Apple's recogniser
+writes "thirty-two hundred kelvin", so "A camera 3200 kelvin" was heard
+perfectly well and then refused. Ordinary talk around the number was
+refused too: "can we get 3200 on all of them", "a camera 5600 now". All
+of it worked in 0.7.1, and all of it works again.
+
+"K" is now a word for kelvin in its own right, in every spelling the
+recogniser uses: 3200 K, 3200K, 5,600 K.
+
+The protection 0.8.0 added is kept, narrowed to where the problem was. A
+number in white balance range is white balance, whatever is said around
+it. Below that range, where the app has to choose between shutter and
+ASA, an unfamiliar word straight after the number is still refused, so
+"A camera 125 anamorphic" doesn't quietly set the shutter. Name the
+setting and it goes: "shutter 180 now".
+
+Every phrase the recogniser is trained on, and every phrase in the
+recorded test clips, is now checked on every change: none of them may be
+refused for a word the app didn't know. That check would have stopped
+0.8.0.
+
+#### Check for updates
+
+There's a **Check for Updates…** item in the menu. It asks whether a
+newer AIcam has been published and, if there is one, lists what changed
+and offers the download. It only asks when you choose it: nothing checks
+on its own, so the app stays quiet on a camera network with no internet.
+
 ### 0.8.0
 
 #### Asking for a frame rate set the shutter
