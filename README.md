@@ -436,6 +436,28 @@ VOSK_MODEL=models/vosk-model-small-en-us-0.15 \
 
 ## Changelog
 
+### 0.8.2
+
+#### When the Mac can't recognise speech, it says so
+
+AIcam listens on the Mac itself, so nothing said on set leaves it. That
+needs Apple's on-device English speech model, and a Mac that hasn't got
+it used to fail without a word: you held the button, spoke, and were
+told it "heard sound but nothing it knows", as if the sentence were the
+problem. Now it says at startup that the model is missing and that
+turning on Dictation in System Settings → Keyboard downloads it. If the
+recogniser gives up partway, it says that too, instead of blaming the
+words.
+
+#### The camera descriptions are in the download
+
+Camera Controls can describe an ALEXA 35, Mini LF, ALEXA Mini or AMIRA
+you have never connected to, from ARRI's own menu simulators. Every
+release until now shipped without those descriptions, so with no camera
+connected there was nothing to describe. They're in the app now, with
+the corrected ranges from 0.7.1, and the build refuses to make an app
+that hasn't got them.
+
 ### 0.8.1
 
 #### "3200 K" works again
