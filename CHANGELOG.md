@@ -1,5 +1,48 @@
 # Changelog
 
+## 0.8.0
+
+### Asking for a frame rate set the shutter
+
+"A camera twenty four frames" set the **shutter to 24°** — nearly three
+stops under, strobing, and reported as done. Same for "24 fps" and
+"frame rate twenty four".
+
+Nothing knew the word *frames*, so it was dropped. The bare 24 then fell
+to the rule that works a setting out from the number alone, and shutter
+was the only setting with 24 in its range. It resolved cleanly to exactly
+the wrong thing, and the confirmation gave no hint the shutter had moved.
+
+Two fixes, because the second one is the real one:
+
+**Frame rate is a setting now.** "A camera twenty four frames", "48 fps",
+"frame rate twenty five". It writes the project rate, resolved against
+the list the camera publishes for it — so an ALEXA 35 takes 47.952 and an
+AMIRA is told it has not got it, with its own rates listed back. A Mini
+LF publishes no project rate at all and is refused outright rather than
+guessed at. "Fifty frames" means 50, never 50i.
+
+Off-speed (sensor) rate is deliberately not included: no camera
+catalogue publishes a range for it, so there would be nothing to check a
+spoken number against.
+
+This is worked out from ARRI's own menu simulators and has not yet been
+tried on a camera. If the menu doesn't move to the rate you asked for,
+that is worth reporting.
+
+**A word it does not know is no longer ignored.** When the setting had to
+be worked out from the number, a leftover word now refuses the phrase —
+"A camera 125 anamorphic" answers *do not know anamorphic* instead of
+quietly setting the shutter. A phrase that names its setting is
+unaffected: "125 degrees anamorphic" still sets the shutter, because
+nothing was guessed. The grammar could always spot the discarded word;
+it just had no say in whether to act.
+
+### An icon
+
+AIcam has one. It lives in the menu bar, so the Dock never shows it, but
+Finder, the Applications folder and the microphone prompt do.
+
 ## 0.7.1
 
 Withdraws 0.7.0, which should not have gone out. Nothing in it changed
